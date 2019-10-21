@@ -5,6 +5,7 @@ import baseFunc.Helper;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import webPages.HomePage;
 import webPages.MenFootballShoesPage;
 import webPages.ProductsPage;
 ;import java.io.IOException;
@@ -13,35 +14,39 @@ import java.util.List;
 public class ManShoesSectionStepDefs {
     private BaseFunc basefunc = new BaseFunc();
     private Helper helper = new Helper(basefunc);
-    private ProductsPage productsPage = new ProductsPage(basefunc);
-    private MenFootballShoesPage menFootballShoesPage = new MenFootballShoesPage(basefunc);
+    private HomePage homePage;
+    private ProductsPage productsPage;
+    private MenFootballShoesPage menFootballShoesPage;
 
-    @Given("we open {string} link")
+    @Given("open {string} link")
     public void open_page(String url) {
         basefunc.openPage(url);
+        homePage = new HomePage(basefunc);
     }
 
-    @When("we push menu")
+    @When("push menu")
     public void push_menu() {
         helper.pushHamburger_BTN();
     }
 
-    @When("we choose {string} section")
+    @When("choose {string} section")
     public void select_section(String sectionName) {
         helper.selectMenuSection(sectionName);
     }
 
-    @When("we select {string} under {string} section in {string} tab")
+    @When("select {string} under {string} section in {string} tab")
     public void click_futbol(String section, String category, String gender) {
+        productsPage = new ProductsPage(basefunc);
         productsPage.selectProductSection(section, category, gender);
     }
 
-    @When("we sort products by {string}")
+    @When("sort products by {string}")
     public void choose_sorting_method(String method) {
+        menFootballShoesPage = new MenFootballShoesPage(basefunc);
         menFootballShoesPage.selectSortingMethod(method);
     }
 
-    @When("we select filters:")
+    @When("select filters:")
     public void select_filters(List<String> filterNames) {
         menFootballShoesPage.selectFilters(filterNames);
     }
@@ -56,17 +61,17 @@ public class ManShoesSectionStepDefs {
         helper.checkSale();
     }
 
-    @Then("we create txt file with with info about products")
+    @Then("create txt file with with info about products")
     public void create_txt_file() throws IOException {
         menFootballShoesPage.collectInformationTxt();
     }
 
-    @Then("we create json file with the same information")
+    @Then("create json file with the same information")
     public void create_json_file() {
-
+        menFootballShoesPage.createJsonFile();
     }
 
-    @Then("we close browser")
+    @Then("close browser")
     public void close_browser() {
         basefunc.closeBrowser();
     }

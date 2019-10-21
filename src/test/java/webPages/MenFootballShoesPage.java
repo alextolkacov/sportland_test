@@ -3,13 +3,15 @@ package webPages;
 import baseFunc.BaseFunc;
 
 
-
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
@@ -53,7 +55,7 @@ public class MenFootballShoesPage {
 
     public void collectInformationTxt() throws IOException {
         List<WebElement> information = baseFunc.getAllElements(PRODUCT_INFORMATION);
-        File file = new File("myFirstFile.txt");
+        File file = new File("C:/Users/Maria/Desktop/menFootballShoes.txt");
         FileWriter fw = new FileWriter(file);
         for (WebElement info: information) {
             fw.write(info.getText() + "\r\n");
@@ -61,6 +63,21 @@ public class MenFootballShoesPage {
         fw.close();
     }
 
+    public void createJsonFile() {
+        List<WebElement> information = baseFunc.getAllElements(PRODUCT_INFORMATION);
+        File file = new File("C:/Users/Maria/Desktop/sportlandFiles/MenFootballShoes/manFootballshoes.json");
+        JSONObject obj = new JSONObject();
+        JSONArray list = new JSONArray();
+        for (int i = 0; i < information.size(); i++) {
+            list.add(information.get(i).getText());
+        }
+        obj.put("Items", list);
 
-
+        try (FileWriter fw = new FileWriter(file)) {
+            fw.write(obj.toJSONString());
+            fw.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
